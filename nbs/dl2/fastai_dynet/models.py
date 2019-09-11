@@ -62,8 +62,11 @@ class Linear(Module):
         self.activ = self.activ
         
     def __call__(self, x):
-        if self.activ: return self.activ(self.w*x + self.b)
-        else:          return self.w*x + self.b
+        try:
+            if self.activ: return self.activ(self.w*x + self.b)
+            else:          return self.w*x + self.b
+        except NotImplementedError:
+            return [self(_x) for _x in x]
     def __repr__(self):
         return f"Linear layer: in={self.n_in}, out={self.n_out}, activation={self.activ.__name__ if self.activ else 'no_op'}"
     
